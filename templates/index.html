@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Prediction System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+        }
+
+        .disclaimer strong {
+            color: #856404;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result.benign {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .result.malignant {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .result.benign h2 {
+            color: #155724;
+        }
+
+        .result.malignant h2 {
+            color: #721c24;
+        }
+
+        .result-details {
+            margin-top: 15px;
+        }
+
+        .result-details p {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎗️ Breast Cancer Prediction System</h1>
+            <p>Student: Onipede Toluwani | Matric No: 22CG031936</p>
+            <p>Machine Learning Algorithm: Logistic Regression</p>
+        </div>
+
+        <div class="disclaimer">
+            <strong>⚠️ Educational Purpose Only:</strong> This system is strictly for educational purposes and must not be presented as a medical diagnostic tool. Always consult healthcare professionals for medical advice.
+        </div>
+
+        <div class="content">
+            <h2 style="margin-bottom: 20px; color: #333;">Enter Tumor Features</h2>
+
+            <form id="predictionForm">
+                <div class="form-group">
+                    <label for="mean_radius">Mean Radius:</label>
+                    <input type="number" id="mean_radius" name="mean radius" step="0.01" required
+                           placeholder="e.g., 14.5">
+                </div>
+
+                <div class="form-group">
+                    <label for="mean_texture">Mean Texture:</label>
+                    <input type="number" id="mean_texture" name="mean texture" step="0.01" required
+                           placeholder="e.g., 19.8">
+                </div>
+
+                <div class="form-group">
+                    <label for="mean_perimeter">Mean Perimeter:</label>
+                    <input type="number" id="mean_perimeter" name="mean perimeter" step="0.01" required
+                           placeholder="e.g., 92.3">
+                </div>
+
+                <div class="form-group">
+                    <label for="mean_area">Mean Area:</label>
+                    <input type="number" id="mean_area" name="mean area" step="0.01" required
+                           placeholder="e.g., 654.8">
+                </div>
+
+                <div class="form-group">
+                    <label for="mean_concavity">Mean Concavity:</label>
+                    <input type="number" id="mean_concavity" name="mean concavity" step="0.0001" required
+                           placeholder="e.g., 0.1234">
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn-predict">🔍 Predict</button>
+                    <button type="reset" class="btn-reset">🔄 Reset</button>
+                </div>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Analyzing...</p>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <div class="result" id="result">
+                <h2 id="resultTitle"></h2>
+                <div class="result-details">
+                    <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+                    <p><strong>Probability of Malignant:</strong> <span id="probMalignant"></span></p>
+                    <p><strong>Probability of Benign:</strong> <span id="probBenign"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 Breast Cancer Prediction System | Educational Project</p>
+            <p>Developed by Onipede Toluwani (22CG031936)</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Hide previous results and errors
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            // Get form data
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (response.ok) {
+                    // Display results
+                    const resultDiv = document.getElementById('result');
+                    const diagnosis = data.diagnosis.toLowerCase();
+
+                    resultDiv.className = 'result ' + diagnosis;
+                    resultDiv.style.display = 'block';
+
+                    document.getElementById('resultTitle').textContent =
+                        `Prediction: ${data.diagnosis}`;
+                    document.getElementById('confidence').textContent =
+                        `${data.confidence}%`;
+                    document.getElementById('probMalignant').textContent =
+                        `${data.probabilities.malignant}%`;
+                    document.getElementById('probBenign').textContent =
+                        `${data.probabilities.benign}%`;
+                } else {
+                    // Display error
+                    const errorDiv = document.getElementById('error');
+                    errorDiv.textContent = data.error || 'An error occurred';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = 'Network error: ' + error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Reset form and results
+        document.getElementById('predictionForm').addEventListener('reset', function() {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
+
