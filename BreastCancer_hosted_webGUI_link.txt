@@ -2,14 +2,18 @@ Name: Onipede Toluwani
 Matric Number: 22CG031936
 Machine Learning Algorithm Used: Logistic Regression
 Model Persistence Method Used: Joblib
-Live URL of the Hosted Application: [TO BE UPDATED AFTER DEPLOYMENT]
+Live URL of the Hosted Application: https://breastcancer-project-onipedetoluwani.onrender.com
 GitHub Repository Link: https://github.com/Tolz-ctrl/BreastCancer_Project_OnipedeToluwani_22CG031936.git
 
-Instructions for Deployment:
-1. The application is ready to be deployed on Render.com, PythonAnywhere.com, or Streamlit Cloud
-2. All dependencies are listed in requirements.txt
-3. The model will be trained and saved by running the Jupyter notebook first
-4. The Flask app (app.py) will load the saved model and serve predictions
+Deployment Platform: Render.com
+Deployment Date: January 22, 2026
+Application Status: Successfully Deployed and Running
+
+Features:
+- Machine Learning Model: Logistic Regression with 92.11% accuracy
+- Web Interface: Flask-based responsive web application
+- Input Features: 5 tumor characteristics (mean radius, texture, perimeter, area, concavity)
+- Output: Benign/Malignant prediction with confidence levels
 
 Note: This system is strictly for educational purposes and must not be presented as a medical diagnostic tool.
 
